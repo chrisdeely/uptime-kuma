@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const NotificationProvider = require("./notification-provider");
 const { DOWN } = require("../../src/util");
 const { Liquid } = require("liquidjs");
+const HTTP_TYPES = ["http", "keyword", "json-query", "zod"];
 
 class SMTP extends NotificationProvider {
     name = "smtp";
@@ -18,7 +19,7 @@ class SMTP extends NotificationProvider {
             secure: notification.smtpSecure,
             tls: {
                 rejectUnauthorized: !notification.smtpIgnoreTLSError || false,
-            }
+            },
         };
 
         // Fix #1129
@@ -53,7 +54,11 @@ class SMTP extends NotificationProvider {
             const customSubject = notification.customSubject?.trim() || "";
             const customBody = notification.customBody?.trim() || "";
 
-            const context = this.generateContext(msg, monitorJSON, heartbeatJSON);
+            const context = this.generateContext(
+                msg,
+                monitorJSON,
+                heartbeatJSON
+            );
             const engine = new Liquid();
             if (customSubject !== "") {
                 const tpl = engine.parse(customSubject);
@@ -94,7 +99,7 @@ class SMTP extends NotificationProvider {
         if (monitorJSON !== null) {
             monitorName = monitorJSON["name"];
 
-            if (monitorJSON["type"] === "http" || monitorJSON["type"] === "keyword" || monitorJSON["type"] === "json-query") {
+            if (HTTP_TYPES.includes(monitorJSON["type"])) {
                 monitorHostnameOrURL = monitorJSON["url"];
             } else {
                 monitorHostnameOrURL = monitorJSON["hostname"];
@@ -103,18 +108,19 @@ class SMTP extends NotificationProvider {
 
         let serviceStatus = "⚠️ Test";
         if (heartbeatJSON !== null) {
-            serviceStatus = (heartbeatJSON["status"] === DOWN) ? "🔴 Down" : "✅ Up";
+            serviceStatus =
+                heartbeatJSON["status"] === DOWN ? "🔴 Down" : "✅ Up";
         }
         return {
             // for v1 compatibility, to be removed in v3
-            "STATUS": serviceStatus,
-            "NAME": monitorName,
-            "HOSTNAME_OR_URL": monitorHostnameOrURL,
+            STATUS: serviceStatus,
+            NAME: monitorName,
+            HOSTNAME_OR_URL: monitorHostnameOrURL,
 
             // variables which are officially supported
-            "status": serviceStatus,
-            "name": monitorName,
-            "hostnameOrURL": monitorHostnameOrURL,
+            status: serviceStatus,
+            name: monitorName,
+            hostnameOrURL: monitorHostnameOrURL,
             monitorJSON,
             heartbeatJSON,
             msg,

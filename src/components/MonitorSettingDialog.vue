@@ -6,12 +6,31 @@
                     <h5 class="modal-title">
                         {{ $t("Monitor Setting", [monitor.name]) }}
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    />
                 </div>
                 <div class="modal-body">
                     <div class="my-3 form-check">
-                        <input id="show-clickable-link" v-model="monitor.isClickAble" class="form-check-input" type="checkbox" @click="toggleLink(monitor.group_index, monitor.monitor_index)" />
-                        <label class="form-check-label" for="show-clickable-link">
+                        <input
+                            id="show-clickable-link"
+                            v-model="monitor.isClickAble"
+                            class="form-check-input"
+                            type="checkbox"
+                            @click="
+                                toggleLink(
+                                    monitor.group_index,
+                                    monitor.monitor_index
+                                )
+                            "
+                        />
+                        <label
+                            class="form-check-label"
+                            for="show-clickable-link"
+                        >
                             {{ $t("Show Clickable Link") }}
                         </label>
                         <div class="form-text">
@@ -21,7 +40,12 @@
 
                     <button
                         class="btn btn-primary btn-add-group me-2"
-                        @click="$refs.badgeGeneratorDialog.show(monitor.id, monitor.name)"
+                        @click="
+                            $refs.badgeGeneratorDialog.show(
+                                monitor.id,
+                                monitor.name
+                            )
+                        "
                     >
                         <font-awesome-icon icon="certificate" />
                         {{ $t("Open Badge Generator") }}
@@ -29,7 +53,11 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                        data-bs-dismiss="modal"
+                    >
                         {{ $t("Close") }}
                     </button>
                 </div>
@@ -45,7 +73,7 @@ import BadgeGeneratorDialog from "./BadgeGeneratorDialog.vue";
 
 export default {
     components: {
-        BadgeGeneratorDialog
+        BadgeGeneratorDialog,
     },
     props: {},
     emits: [],
@@ -90,7 +118,9 @@ export default {
          * @returns {void}
          */
         toggleLink(groupIndex, index) {
-            this.$root.publicGroupList[groupIndex].monitorList[index].sendUrl = !this.$root.publicGroupList[groupIndex].monitorList[index].sendUrl;
+            this.$root.publicGroupList[groupIndex].monitorList[index].sendUrl =
+                !this.$root.publicGroupList[groupIndex].monitorList[index]
+                    .sendUrl;
         },
 
         /**
@@ -105,10 +135,23 @@ export default {
         showLink(monitor, ignoreSendUrl = false) {
             // We must check if there are any elements in monitorList to
             // prevent undefined errors if it hasn't been loaded yet
-            if (this.$parent.editMode && ignoreSendUrl && Object.keys(this.$root.monitorList).length) {
-                return this.$root.monitorList[monitor.element.id].type === "http" || this.$root.monitorList[monitor.element.id].type === "keyword" || this.$root.monitorList[monitor.element.id].type === "json-query";
+            const HTTP_TYPES = ["http", "keyword", "json-query", "zod"];
+
+            if (
+                this.$parent.editMode &&
+                ignoreSendUrl &&
+                Object.keys(this.$root.monitorList).length
+            ) {
+                return HTTP_TYPES.includes(
+                    this.$root.monitorList[monitor.element.id].type
+                );
             }
-            return monitor.element.sendUrl && monitor.element.url && monitor.element.url !== "https://" && !this.editMode;
+            return (
+                monitor.element.sendUrl &&
+                monitor.element.url &&
+                monitor.element.url !== "https://" &&
+                !this.editMode
+            );
         },
     },
 };
@@ -118,7 +161,8 @@ export default {
 @import "../assets/vars.scss";
 
 .dark {
-    .modal-dialog .form-text, .modal-dialog p {
+    .modal-dialog .form-text,
+    .modal-dialog p {
         color: $dark-font-color;
     }
 }
