@@ -225,18 +225,27 @@ async function sendRemoteBrowserList(socket) {
 }
 
 /**
- * Send list of docker hosts to client
+ * Send list of zod schemas to client
  * @param {Socket} socket Socket.io socket instance
- * @returns {Promise<Bean[]>} List of docker hosts
+ * @returns {Promise<Bean[]>} List of zod schemas
  */
 async function sendZodSchemaList(socket) {
     const timeLogger = new TimeLogger();
 
     let result = [];
-    let list = await R.find("zod_schema", " user_id = ? ", [socket.userID]);
-
+    let list;
+    try {
+        list = await R.find("zod_schema", " user_id = ? ", [socket.userID]);
+    } catch (e) {
+        console.log(e);
+    }
     for (let bean of list) {
-        result.push(bean.toJSON());
+        console.log(bean);
+        try {
+            result.push(bean.toJSON());
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     io.to(socket.userID).emit("zodSchemaList", result);

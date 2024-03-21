@@ -4,10 +4,14 @@ class ZodSchema {
     /**
      * Gets Zod schema from ID
      * @param {number} zodSchemaID ID of the Zod Schema
+     * @param userID
      * @returns {Promise<Bean>} Zod Schema
      */
-    static async get(zodSchemaID) {
-        let bean = await R.findOne("zod_schema", " id = ? ", [zodSchemaID]);
+    static async get(zodSchemaID, userID) {
+        let bean = await R.findOne("zod_schema", " id = ? AND user_id = ? ", [
+            zodSchemaID,
+            userID,
+        ]);
 
         if (!bean) {
             throw new Error("Zod Schema not found");
@@ -20,13 +24,17 @@ class ZodSchema {
      * Save a Zod Schema
      * @param {object} zodSchema Zod Schema to save
      * @param {?number} zodSchemaID ID of the Zod Schema to update
+     * @param userID
      * @returns {Promise<Bean>} Updated Zod Schema
      */
-    static async save(zodSchema, zodSchemaID) {
+    static async save(zodSchema, zodSchemaID, userID) {
         let bean;
 
         if (zodSchemaID) {
-            bean = await R.findOne("zod_schema", " id = ? ", [zodSchemaID]);
+            bean = await R.findOne("zod_schema", " id = ? AND user_id = ? ", [
+                zodSchemaID,
+                userID,
+            ]);
 
             if (!bean) {
                 throw new Error("Zod Schema not found");
@@ -46,10 +54,14 @@ class ZodSchema {
     /**
      * Delete a Zod Schema
      * @param {number} zodSchemaID ID of the Zod Schema to delete
+     * @param userID
      * @returns {Promise<void>}
      */
-    static async delete(zodSchemaID) {
-        let bean = await R.findOne("zod_schema", " id = ? ", [zodSchemaID]);
+    static async delete(zodSchemaID, userID) {
+        let bean = await R.findOne("zod_schema", " id = ? AND user_id = ? ", [
+            zodSchemaID,
+            userID,
+        ]);
 
         if (!bean) {
             throw new Error("Zod Schema not found");

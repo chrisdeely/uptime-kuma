@@ -4,6 +4,7 @@ exports.up = function (knex) {
             table.increments("id");
             table.string("name", 255).notNullable();
             table.text("schema").notNullable();
+            table.integer("user_id").unsigned();
         })
         .alterTable("monitor", function (table) {
             // Add new column monitor.remote_browser
