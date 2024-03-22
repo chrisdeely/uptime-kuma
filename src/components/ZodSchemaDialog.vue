@@ -49,8 +49,8 @@
                                 {{ $t("Examples") }}:
                                 <ul>
                                     <li>
-                                        { id: z.number(), count: z.number(),
-                                        name: z.string() }
+                                        z.object( { id: z.number(), count:
+                                        z.number(), name: z.string() } )
                                     </li>
                                 </ul>
                             </div>

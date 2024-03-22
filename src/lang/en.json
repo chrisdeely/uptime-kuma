@@ -887,7 +887,7 @@
     "Zod Schemas": "Zod Schemas",
     "Zod Schema": "Zod Schema",
     "Add a Zod Schema": "Add a Zod Schema",
-    "Zod Schema Text": "Provide the Zod Schema as a JSON object (will be wrapped in `z.object())`",
+    "Zod Schema Text": "Provide the Zod Schema (must be wrapped in `z.object())`",
     "Zod Schema not found!": "Zod Schema not found!",
     "GrafanaOncallUrl": "Grafana Oncall URL",
     "Browser Screenshot": "Browser Screenshot",
