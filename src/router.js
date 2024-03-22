@@ -32,6 +32,7 @@ const Security = () => import("./components/settings/Security.vue");
 import Proxies from "./components/settings/Proxies.vue";
 import About from "./components/settings/About.vue";
 import RemoteBrowsers from "./components/settings/RemoteBrowsers.vue";
+import ZodSchemaManager from "./components/settings/ZodSchemaManager.vue";
 
 const routes = [
     {
@@ -119,6 +120,10 @@ const routes = [
                                 component: RemoteBrowsers,
                             },
                             {
+                                path: "zod-schemas",
+                                component: ZodSchemaManager,
+                            },
+                            {
                                 path: "security",
                                 component: Security,
                             },
@@ -134,7 +139,7 @@ const routes = [
                                 path: "about",
                                 component: About,
                             },
-                        ]
+                        ],
                     },
                     {
                         path: "/manage-status-page",
