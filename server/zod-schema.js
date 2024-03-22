@@ -43,6 +43,7 @@ class ZodSchema {
             bean = R.dispense("zod_schema");
         }
 
+        bean.user_id = userID;
         bean.name = zodSchema.name;
         bean.schema = zodSchema.schema;
 

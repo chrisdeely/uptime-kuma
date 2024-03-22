@@ -15,7 +15,11 @@ module.exports.zodSchemaSocketHandler = (socket) => {
         try {
             checkLogin(socket);
 
-            let zodSchemaBean = await ZodSchema.save(zodSchema, zodSchemaID);
+            let zodSchemaBean = await ZodSchema.save(
+                zodSchema,
+                zodSchemaID,
+                socket.userID
+            );
             await sendZodSchemaList(socket);
 
             callback({
@@ -36,7 +40,7 @@ module.exports.zodSchemaSocketHandler = (socket) => {
         try {
             checkLogin(socket);
 
-            await ZodSchema.delete(zodSchemaId);
+            await ZodSchema.delete(zodSchemaId, socket.userID);
             await sendZodSchemaList(socket);
 
             callback({

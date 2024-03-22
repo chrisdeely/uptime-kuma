@@ -283,10 +283,12 @@
                                     <ActionSelect
                                         v-model="monitor.zod_schema"
                                         :options="zodSchemaOptions"
+                                        id="zod-schema"
                                         icon="plus"
                                         :action="
                                             () => $refs.zodSchemaDialog.show()
                                         "
+                                        :required="monitor.type === 'zod'"
                                     />
                                 </div>
                             </div>

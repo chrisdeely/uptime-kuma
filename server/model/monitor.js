@@ -78,6 +78,7 @@ class Monitor extends BeanModel {
             name: this.name,
             sendUrl: this.sendUrl,
             type: this.type,
+            zodSchema: this.zod_schema,
         };
 
         if (this.sendUrl) {
@@ -196,7 +197,7 @@ class Monitor extends BeanModel {
             kafkaProducerMessage: this.kafkaProducerMessage,
             screenshot,
             remote_browser: this.remote_browser,
-            zodSchema: this.zod_schema,
+            zod_schema: this.zod_schema,
         };
 
         if (includeSensitiveData) {
@@ -255,6 +256,15 @@ class Monitor extends BeanModel {
             "SELECT mt.*, tag.name, tag.color FROM monitor_tag mt JOIN tag ON mt.tag_id = tag.id WHERE mt.monitor_id = ? ORDER BY tag.name",
             [this.id]
         );
+    }
+
+    /**
+     * Get the full Zod schema for this monitor
+     * @param {number} id zod schema id
+     * @returns {ZodSchema}
+     */
+    async getZodSchema(id) {
+        return await R.findOne("zod_schema", " id = ? ", [id]);
     }
 
     /**
@@ -746,7 +756,10 @@ class Monitor extends BeanModel {
                         }
                     } else if (this.type === "zod") {
                         let data = res.data;
-                        let zodSchema = z.object(JSON.parse(this.zodSchema)); //todo fix schema retrieval
+                        const { schema } = await this.getZodSchema(
+                            this.zodSchema
+                        );
+                        let zodSchema = z && eval(schema);
                         try {
                             zodSchema.parse(data);
                             bean.msg += ", schema matched";
